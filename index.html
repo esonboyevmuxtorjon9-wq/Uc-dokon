@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Midasbuy — PUBG Mobile UC & Prime</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg-main: #0c1322;
+      --bg-header: #11192c;
+      --card-bottom: #131b2e;
+      --card-border: #222f4e;
+      --gold: #ffbe18;
+      --orange-pill: #e88b1a;
+      --blue-btn: #1882ff;
+      --text-white: #ffffff;
+      --text-muted: #7e8db0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg-main);
+      color: var(--text-white);
+      padding-bottom: 80px;
+      overflow-x: hidden;
+    }
+
+    /* TOP MIDASBUY NAVBAR */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: var(--bg-header);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 18px;
+      letter-spacing: -0.3px;
+      color: #fff;
+    }
+
+    .logo-diamond {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #2563eb 0%, #38bdf8 50%, #f59e0b 51%, #fbbf24 100%);
+      border-radius: 6px;
+      transform: rotate(45deg) scale(0.82);
+      display: inline-block;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .lang-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .uz-flag {
+      width: 18px;
+      height: 12px;
+      border-radius: 2px;
+      background: linear-gradient(to bottom, #0099b5 0% 31%, #ce1126 31% 35%, #ffffff 35% 65%, #ce1126 65% 69%, #1eb53a 69% 100%);
+      display: inline-block;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      padding: 6px 11px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .nav-btn.active {
+      background: var(--blue-btn);
+      border-color: var(--blue-btn);
+    }
+
+    .menu-icon-btn {
+      position: relative;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 2px 4px;
+    }
+
+    .red-dot {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 7px;
+      height: 7px;
+      background: #ef4444;
+      border-radius: 50%;
+    }
+
+    /* PLAYER ID STRIP */
+    .player-strip {
+      background: linear-gradient(90deg, #16223b 0%, #111a2e 100%);
+      border-bottom: 1px solid var(--card-border);
+      padding: 10px 14px;
+    }
+
+    .player-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .id-input-wrap {
+      flex: 1;
+    }
+
+    .id-input {
+      width: 100%;
+      background: #0a101d;
+      border: 1px solid #2b3b61;
+      color: #fff;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+    }
+
+    .id-input:focus {
+      border-color: var(--blue-btn);
+    }
+
+    .id-save-btn {
+      background: var(--blue-btn);
+      color: #fff;
+      border: none;
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* FILTER PILLS */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+
+    .m-pill {
+      background: #182238;
+      border: 1px solid #263557;
+      color: #cbd5e1;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .m-pill.active {
+      background: var(--blue-btn);
+      border-color: var(--blue-btn);
+      color: #fff;
+    }
+
+    .sub-filter-bar {
+      display: flex;
+      gap: 8px;
+      padding: 0 14px 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .sub-filter-bar::-webkit-scrollbar { display: none; }
+
+    .sub-pill {
+      background: #141d30;
+      color: #94a3b8;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .sub-pill.active {
+      background: var(--blue-btn);
+      color: #fff;
+    }
+
+    /* 2-COLUMN MIDASBUY UC GRID */
+    .container {
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .uc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 0 14px;
+    }
+
+    .uc-card {
+      background: var(--card-bottom);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.12s ease, border-color 0.12s ease;
+    }
+
+    .uc-card:active {
+      transform: scale(0.97);
+      border-color: var(--gold);
+    }
+
+    .uc-card-top {
+      position: relative;
+      height: 104px;
+      background: radial-gradient(circle at 50% 45%, #263559 0%, #18223a 75%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popular-tag {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: linear-gradient(90deg, #4ade80, #22c55e);
+      color: #052e16;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    .bonus-pct-tag {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(120, 95, 50, 0.55);
+      border: 1px solid rgba(255, 190, 24, 0.35);
+      color: #fde68a;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    .uc-card-body {
+      padding: 10px 8px 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .uc-amount-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .uc-mini-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #fde68a, #d97706);
+      color: #1e1b18;
+      font-size: 8px;
+      font-weight: 900;
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+
+    .uc-bonus-text {
+      color: var(--gold);
+      font-weight: 800;
+    }
+
+    .uc-price-gold {
+      color: var(--gold);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .uc-old-price {
+      color: var(--text-muted);
+      font-size: 11px;
+      text-decoration: line-through;
+    }
+
+    .uc-discount-pill {
+      margin-top: 2px;
+      background: var(--orange-pill);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* PRIME & PRIME PLUS CARDS */
+    .prime-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 0 14px;
+    }
+
+    .prime-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #2b395c;
+      background: #141e33;
+    }
+
+    .prime-banner-head {
+      background: linear-gradient(95deg, #8b1616 0%, #5b1015 52%, #231f20 100%);
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .prime-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .prime-offer-right {
+      text-align: right;
+      line-height: 1.1;
+    }
+
+    .prime-offer-big {
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .prime-offer-sub {
+      font-size: 11px;
+      color: #fca5a5;
+      font-weight: 700;
+    }
+
+    .prime-perks-body {
+      background: linear-gradient(180deg, #dfd9d2 0%, #cfc7be 100%);
+      color: #1f2937;
+      padding: 10px 12px;
+    }
+
+    .perk-sec-title {
+      font-size: 10px;
+      font-weight: 800;
+      color: #4b5563;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .perk-instant-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.45);
+      border-radius: 8px;
+      padding: 8px 6px;
+      margin-bottom: 8px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .perk-bottom-split {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .daily-chips {
+      display: flex;
+      gap: 5px;
+    }
+
+    .daily-chip {
+      background: #1f2937;
+      color: #fbbf24;
+      border-radius: 5px;
+      padding: 4px 6px;
+      font-size: 10px;
+      font-weight: 800;
+      text-align: center;
+      min-width: 34px;
+    }
+
+    .prime-footer {
+      background: #141e33;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .prime-price-box {
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .prime-price-box span {
+      font-size: 12px;
+      font-weight: 500;
+      color: #94a3b8;
+    }
+
+    .prime-sub-btn {
+      background: var(--blue-btn);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .midas-footer {
+      margin: 24px 14px 10px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 18px;
+      right: 14px;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(20, 29, 48, 0.92);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 40;
+    }
+
+    /* CHECKOUT MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: #131c31;
+      width: 100%;
+      max-width: 540px;
+      border-radius: 18px 18px 0 0;
+      border-top: 1px solid #2b3b61;
+      padding: 18px;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .pay-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .btn-click {
+      background: linear-gradient(135deg, #0073ff, #0052cc);
+      color: #fff;
+      border: none;
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-payme {
+      background: linear-gradient(135deg, #14b8a6, #0d9488);
+      color: #fff;
+      border: none;
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .card-box {
+      background: #0a101d;
+      border: 1px dashed var(--gold);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 10px 0;
+    }
+
+    .card-num-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .copy-btn {
+      background: var(--gold);
+      color: #000;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .upload-box {
+      display: block;
+      border: 1.5px dashed #2b3b61;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 12px;
+      background: #0a101d;
+    }
+    .upload-box img { max-width: 100%; max-height: 170px; border-radius: 8px; margin-top: 8px; }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(90deg, var(--gold), #f59e0b);
+      color: #000;
+      border: none;
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* ORDERS & ADMIN PANEL */
+    .panel-box {
+      background: #131c31;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 12px 14px;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin: 12px 14px;
+    }
+
+    .stat-card {
+      background: #131c31;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .order-item {
+      background: #0a101d;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 11px;
+      margin-bottom: 9px;
+      font-size: 13px;
+    }
+
+    .order-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .btn-ok { flex: 1; background: #10b981; color: #fff; border: none; padding: 8px; border-radius: 7px; font-weight: 700; cursor: pointer; }
+    .btn-no { flex: 1; background: #ef4444; color: #fff; border: none; padding: 8px; border-radius: 7px; font-weight: 700; cursor: pointer; }
+
+    .status-tag { padding: 2px 7px; border-radius: 5px; font-size: 10px; font-weight: 800; }
+    .st-pending { background: rgba(255, 190, 24, 0.2); color: var(--gold); }
+    .st-approved { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .st-rejected { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+    .price-edit-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 12px;
+    }
+
+    .mini-price-input {
+      width: 110px;
+      background: #0a101d;
+      border: 1px solid #2b3b61;
+      color: var(--gold);
+      font-weight: 700;
+      padding: 5px 8px;
+      border-radius: 6px;
+      text-align: right;
+    }
+
+    .field-group { margin-bottom: 9px; }
+    .field-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- MIDASBUY HEADER -->
+  <header class="navbar">
+    <div class="logo-wrap" onclick="switchView('shop')" style="cursor:pointer;">
+      <span class="logo-diamond"></span>
+      <span>Midasbuy</span>
+    </div>
+    <div class="nav-right">
+      <div class="lang-pill"><span class="uz-flag"></span> UZ</div>
+      <button class="nav-btn active" id="navShop" onclick="switchView('shop')">Do'kon</button>
+      <button class="nav-btn" id="navOrders" onclick="switchView('orders')">Tarix</button>
+      <button class="nav-btn hidden" id="navAdmin" onclick="switchView('admin')">⚙️ Admin</button>
+      <button class="menu-icon-btn" onclick="switchView('orders')" title="Buyurtmalar">
+        ☰<span class="red-dot"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- PLAYER ID INPUT BAR -->
+  <div class="player-strip">
+    <div class="player-row">
+      <div class="id-input-wrap">
+        <input type="number" id="pubgIdInput" class="id-input" placeholder="🎮 PUBG Mobile Player ID kiriting..." oninput="savePubgId()" />
+      </div>
+      <button class="id-save-btn" id="idStatusBtn" onclick="savePubgId(true)">Saqlash</button>
+    </div>
+  </div>
+
+  <!-- 1. DO'KON VIEW -->
+  <main class="container" id="viewShop">
+    <div class="filter-bar">
+      <button class="m-pill active" id="catUcBtn" onclick="setMainCategory('uc')">💎 UC PAKETLAR ▾</button>
+      <button class="m-pill" id="catPrimeBtn" onclick="setMainCategory('prime')">👑 PRIME / PRIME PLUS ▾</button>
+      <button class="m-pill" onclick="switchView('orders')">🧾 BUYURTMALAR</button>
+    </div>
+
+    <div class="sub-filter-bar" id="ucSubFilters">
+      <button class="sub-pill active" onclick="setUcFilter('all', this)">Barchasi (22)</button>
+      <button class="sub-pill" onclick="setUcFilter('rp', this)">🔥 RP Paketlar</button>
+      <button class="sub-pill" onclick="setUcFilter('popular', this)">⭐ Ommabop</button>
+      <button class="sub-pill" onclick="setUcFilter('big', this)">💰 Katta UC</button>
+    </div>
+
+    <div class="sub-filter-bar hidden" id="primeSubFilters">
+      <button class="sub-pill active" onclick="setPrimeFilter('all', this)">Barchasi</button>
+      <button class="sub-pill" onclick="setPrimeFilter('1m', this)">1 OY</button>
+      <button class="sub-pill" onclick="setPrimeFilter('6m', this)">6 OY</button>
+      <button class="sub-pill" onclick="setPrimeFilter('12m', this)">12 OY</button>
+    </div>
+
+    <div class="uc-grid" id="ucGrid"></div>
+    <div class="prime-list hidden" id="primeList"></div>
+
+    <footer class="midas-footer">
+      <div class="logo-wrap" style="margin-bottom:6px; font-size:16px;">
+        <span class="logo-diamond"></span>
+        <span>Midasbuy</span>
+      </div>
+      <div>PUBG Mobile UC va Prime obunalarini rasmiy, xavfsiz va tezkor to‘ldirish do‘koni. To‘lov tasdiqlangach UC bir necha daqiqada hisobingizga tushiriladi.</div>
+    </footer>
+  </main>
+
+  <!-- 2. MIJOZ BUYURTMALARI -->
+  <section class="container hidden" id="viewOrders">
+    <div class="panel-box">
+      <div class="panel-title">📦 Mening buyurtmalarim</div>
+      <div id="myOrdersList">Hozircha buyurtmalar yo'q.</div>
+    </div>
+  </section>
+
+  <!-- 3. ADMIN PANEL (FAQAT ID: 8909500947 UCHUN) -->
+  <section class="container hidden" id="viewAdmin">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div style="font-size:11px; color:var(--text-muted);">Jami buyurtmalar</div>
+        <div style="font-size:17px; font-weight:800; color:var(--gold); margin-top:4px;" id="statTotal">0</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size:11px; color:var(--text-muted);">Tasdiqlangan</div>
+        <div style="font-size:17px; font-weight:800; color:#10b981; margin-top:4px;" id="statApproved">0</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size:11px; color:var(--text-muted);">Umumiy tushum</div>
+        <div style="font-size:16px; font-weight:800; color:var(--gold); margin-top:4px;" id="statRevenue">0 UZS</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-size:11px; color:var(--text-muted);">Sof foyda</div>
+        <div style="font-size:16px; font-weight:800; color:#10b981; margin-top:4px;" id="statProfit">0 UZS</div>
+      </div>
+    </div>
+
+    <div class="panel-box">
+      <div class="panel-title">🧾 Kelib tushgan cheklar va to‘lovlar</div>
+      <div id="adminOrdersList">Buyurtmalar topilmadi.</div>
+    </div>
+
+    <div class="panel-box">
+      <div class="panel-title">💳 Click, Payme va Karta sozlamalari</div>
+      <div class="field-group">
+        <label>Click Merchant ID:</label>
+        <input type="text" id="admClickMerchant" class="id-input" placeholder="Masalan: 12345" />
+      </div>
+      <div class="field-group">
+        <label>Click Service ID:</label>
+        <input type="text" id="admClickService" class="id-input" placeholder="Masalan: 54321" />
+      </div>
+      <div class="field-group">
+        <label>Payme Merchant ID:</label>
+        <input type="text" id="admPaymeMerchant" class="id-input" placeholder="65f1a2b3c4d5e6f7a8b9c0d1" />
+      </div>
+      <div class="field-group">
+        <label>Karta raqami (Chek orqali to‘lov uchun):</label>
+        <input type="text" id="admCardNum" class="id-input" placeholder="8600 3141 2581 5052" />
+      </div>
+      <div class="field-group">
+        <label>Karta egasi (F.I.SH):</label>
+        <input type="text" id="admCardHolder" class="id-input" placeholder="TURDIYEVA SHOXIDA" />
+      </div>
+      <button class="btn-primary" onclick="saveAdminSettings()">💾 Sozlamalarni saqlash</button>
+    </div>
+
+    <div class="panel-box">
+      <div class="panel-title">💰 Narxlarni tahrirlash (UZS)</div>
+      <div id="adminPriceList"></div>
+      <button class="btn-primary" style="margin-top:12px;" onclick="saveEditedPrices()">✅ Yangi narxlarni saqlash</button>
+    </div>
+  </section>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal-backdrop" id="payModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 style="font-size:16px;">💳 To‘lov usulini tanlang</h3>
+        <button style="background:none; border:none; color:#94a3b8; font-size:22px; cursor:pointer;" onclick="closeModal()">✕</button>
+      </div>
+
+      <div style="background:#0a101d; padding:12px; border-radius:10px; font-size:13px; border:1px solid var(--card-border);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span style="color:var(--text-muted);">Paket:</span>
+          <strong id="mPkgName">-</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span style="color:var(--text-muted);">PUBG ID:</span>
+          <strong id="mPubgId" style="color:var(--gold);">-</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--text-muted);">To‘lov summasi:</span>
+          <strong id="mPkgPrice" style="color:var(--gold); font-size:15px;">-</strong>
+        </div>
+      </div>
+
+      <div class="pay-methods">
+        <button class="btn-click" onclick="payWithGateway('click')">🔵 Click</button>
+        <button class="btn-payme" onclick="payWithGateway('payme')">🟢 Payme</button>
+      </div>
+
+      <div style="text-align:center; font-size:11px; color:var(--text-muted); margin:8px 0;">— YOKI KARTA ORQALI CHEK YUKLASH —</div>
+
+      <div class="card-box">
+        <div style="font-size:11px; color:var(--text-muted);">Kartaga aniq summani o‘tkazing:</div>
+        <div class="card-num-row">
+          <span style="font-family:monospace; font-size:15px; font-weight:800; color:var(--gold);" id="mCardNum">8600 3141 2581 5052</span>
+          <button class="copy-btn" onclick="copyCard()">📋 Nusxalash</button>
+        </div>
+        <div style="font-size:12px; margin-top:4px; font-weight:700;" id="mCardHolder">TURDIYEVA SHOXIDA</div>
+      </div>
+
+      <label class="upload-box" for="receiptFile">
+        <div style="font-size:22px;">📸</div>
+        <div style="font-size:13px; font-weight:700; margin-top:4px;">To‘lov cheki rasmini yuklang</div>
+        <div style="font-size:11px; color:var(--text-muted);">Click / Payme / Uzum chek skrinshoti</div>
+        <img id="receiptPreview" class="hidden" />
+        <input type="file" id="receiptFile" accept="image/*" class="hidden" onchange="previewReceipt(event)" />
+      </label>
+
+      <button class="btn-primary" id="submitOrderBtn" onclick="submitReceiptOrder()">✅ Chek bilan tasdiqlash</button>
+    </div>
+  </div>
+
+  <button class="scroll-top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+
+  <script>
+    // ================= SOZLAMALAR =================
+    const ADMIN_IDS = [8909500947];
+    const BOT_USERNAME = "YOUR_BOT_USERNAME"; // Bot username (@ belgisiz)
+    const API_URL = ""; // Masalan: "https://sizning-tunnel.trycloudflare.com"
+
+    const DEFAULT_CARD_NUM = "8600 3141 2581 5052";
+    const DEFAULT_CARD_HOLDER = "TURDIYEVA SHOXIDA";
+
+    const DEFAULT_ITEMS = [
+      { id: "uc_30", cat: "uc", baseTitle: "30", bonusTitle: "", tag: "uc", popular: false, pct: "", badge: "-8.73%", oldPrice: 8000, base: 5750, price: 7000, tier: 1 },
+      { id: "uc_60", cat: "uc", baseTitle: "60", bonusTitle: "", tag: "popular", popular: true, pct: "", badge: "-8.73%", oldPrice: 14500, base: 11500, price: 13000, tier: 1 },
+      { id: "uc_120", cat: "uc", baseTitle: "120", bonusTitle: "", tag: "uc", popular: false, pct: "", badge: "-8.73%", oldPrice: 29000, base: 23000, price: 26000, tier: 1 },
+      { id: "uc_180", cat: "uc", baseTitle: "180", bonusTitle: "", tag: "uc", popular: false, pct: "", badge: "-8.73%", oldPrice: 43000, base: 34500, price: 39000, tier: 2 },
+      { id: "uc_325", cat: "uc", baseTitle: "300", bonusTitle: "+25", tag: "rp", popular: true, pct: "8%", badge: "RP 🔥", oldPrice: 65000, base: 57500, price: 60000, tier: 2 },
+      { id: "uc_385", cat: "uc", baseTitle: "385", bonusTitle: "RP", tag: "rp", popular: false, pct: "8%", badge: "RP (kuponsiz) 🔥", oldPrice: 78000, base: 69000, price: 72000, tier: 2 },
+      { id: "uc_660", cat: "uc", baseTitle: "600", bonusTitle: "+60", tag: "popular", popular: true, pct: "10%", badge: "-8.73%", oldPrice: 128000, base: 115000, price: 118000, tier: 2 },
+      { id: "uc_720", cat: "uc", baseTitle: "720", bonusTitle: "", tag: "uc", popular: false, pct: "10%", badge: "-8.73%", oldPrice: 142000, base: 126500, price: 130000, tier: 2 },
+      { id: "uc_985", cat: "uc", baseTitle: "985", bonusTitle: "", tag: "uc", popular: false, pct: "12%", badge: "-8.73%", oldPrice: 195000, base: 172500, price: 180000, tier: 3 },
+      { id: "uc_1320", cat: "uc", baseTitle: "1320", bonusTitle: "", tag: "uc", popular: false, pct: "15%", badge: "-8.73%", oldPrice: 255000, base: 230000, price: 238000, tier: 3 },
+      { id: "uc_1800", cat: "uc", baseTitle: "1500", bonusTitle: "+300", tag: "popular", popular: false, pct: "20%", badge: "-8.73%", oldPrice: 318000, base: 287500, price: 295000, tier: 3 },
+      { id: "uc_2125", cat: "uc", baseTitle: "2125", bonusTitle: "", tag: "uc", popular: false, pct: "22%", badge: "-8.73%", oldPrice: 382000, base: 345000, price: 355000, tier: 3 },
+      { id: "uc_2460", cat: "uc", baseTitle: "2460", bonusTitle: "", tag: "uc", popular: false, pct: "25%", badge: "-8.73%", oldPrice: 445000, base: 402500, price: 415000, tier: 3 },
+      { id: "uc_3850", cat: "uc", baseTitle: "3000", bonusTitle: "+850", tag: "big", popular: false, pct: "28%", badge: "-8.73%", oldPrice: 635000, base: 575000, price: 590000, tier: 4 },
+      { id: "uc_5650", cat: "uc", baseTitle: "5650", bonusTitle: "", tag: "big", popular: false, pct: "30%", badge: "-8.73%", oldPrice: 945000, base: 862500, price: 885000, tier: 4 },
+      { id: "uc_8100", cat: "uc", baseTitle: "6000", bonusTitle: "+2100", tag: "big", popular: false, pct: "35%", badge: "-8.73%", oldPrice: 1265000, base: 1150000, price: 1180000, tier: 4 },
+      { id: "uc_16200", cat: "uc", baseTitle: "12000", bonusTitle: "+4200", tag: "big", popular: false, pct: "35%", badge: "-8.73%", oldPrice: 2520000, base: 2300000, price: 2360000, tier: 5 },
+      { id: "uc_24300", cat: "uc", baseTitle: "18000", bonusTitle: "+6300", tag: "big", popular: false, pct: "35%", badge: "-8.73%", oldPrice: 3780000, base: 3450000, price: 3540000, tier: 5 },
+      { id: "uc_32400", cat: "uc", baseTitle: "24000", bonusTitle: "+8400", tag: "big", popular: false, pct: "35%", badge: "-8.73%", oldPrice: 5040000, base: 4600000, price: 4720000, tier: 5 },
+      { id: "uc_40500", cat: "uc", baseTitle: "30000", bonusTitle: "+10500", tag: "big", popular: false, pct: "35%", badge: "-8.73%", oldPrice: 6300000, base: 5750000, price: 5900000, tier: 5 },
+      { id: "uc_48600", cat: "uc", baseTitle: "36000", bonusTitle: "+12600", tag: "big", popular: false, pct: "35%", badge: "-8.73%", oldPrice: 7560000, base: 6900000, price: 7080000, tier: 5 },
+      { id: "uc_81000", cat: "uc", baseTitle: "60000", bonusTitle: "+21000", tag: "big", popular: false, pct: "35%", badge: "-8.73%", oldPrice: 12600000, base: 11500000, price: 11800000, tier: 5 },
+
+      // PRIME & PRIME PLUS OBUNALAR
+      { id: "pr_1m", cat: "prime", period: "1m", type: "prime", name: "PRIME", periodLabel: "/1 oy", mult: "×12.5", instant: ["UC x60", "≈150 UC kupon"], daily: ["UC 3", "RP 5"], base: 10300, price: 13000 },
+      { id: "prp_1m", cat: "prime", period: "1m", type: "plus", name: "PRIME PLUS", periodLabel: "/1 oy", mult: "×15", instant: ["UC x660", "RP x300", "≈1440 UC"], daily: ["UC 8", "RP 10", "G 50"], base: 104500, price: 112000 },
+      { id: "pr_6m", cat: "prime", period: "6m", type: "prime", name: "PRIME", periodLabel: "/6 oy", mult: "×12.5", instant: ["UC x360", "≈900 UC kupon"], daily: ["UC 3", "RP 5"], base: 61500, price: 67000 },
+      { id: "prp_6m", cat: "prime", period: "6m", type: "plus", name: "PRIME PLUS", periodLabel: "/6 oy", mult: "×15", instant: ["UC x3960", "RP x1800", "≈8640 UC"], daily: ["UC 8", "RP 10", "G 50"], base: 616200, price: 635000 },
+      { id: "pr_12m", cat: "prime", period: "12m", type: "prime", name: "PRIME", periodLabel: "/12 oy", mult: "×12.5", instant: ["UC x720", "≈1800 UC kupon"], daily: ["UC 3", "RP 5"], base: 116200, price: 125000 },
+      { id: "prp_12m", cat: "prime", period: "12m", type: "plus", name: "PRIME PLUS", periodLabel: "/12 oy", mult: "×15", instant: ["UC x7920", "RP x3600", "≈17280 UC"], daily: ["UC 8", "RP 10", "G 50"], base: 1162800, price: 1195000 }
+    ];
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.ready(); tg.expand(); }
+
+    const currentUser = tg?.initDataUnsafe?.user || null;
+    const isAdmin = Boolean(currentUser && ADMIN_IDS.includes(Number(currentUser.id)));
+    let mainCat = "uc";
+    let ucFilter = "all";
+    let primeFilter = "all";
+    let selectedItem = null;
+
+    let savedCard = localStorage.getItem("uc_card_num");
+    let savedHolder = localStorage.getItem("uc_card_holder");
+    if (!savedCard || savedCard === "8600 1234 5678 9012") {
+      savedCard = DEFAULT_CARD_NUM;
+      localStorage.setItem("uc_card_num", savedCard);
+    }
+    if (!savedHolder || savedHolder === "ADMIN KARTASI") {
+      savedHolder = DEFAULT_CARD_HOLDER;
+      localStorage.setItem("uc_card_holder", savedHolder);
+    }
+
+    let state = {
+      clickMerchantId: localStorage.getItem("uc_click_merchant") || "",
+      clickServiceId: localStorage.getItem("uc_click_service") || "",
+      paymeMerchantId: localStorage.getItem("uc_payme_merchant") || "",
+      cardNumber: savedCard,
+      cardHolder: savedHolder,
+      items: JSON.parse(localStorage.getItem("uc_custom_items_v2")) || DEFAULT_ITEMS,
+      orders: JSON.parse(localStorage.getItem("uc_orders")) || []
+    };
+
+    function formatUZS(n) {
+      return Number(n).toLocaleString("ru-RU") + " UZS";
+    }
+
+    function getUcStackSvg(tier) {
+      const count = Math.min(tier + 1, 5);
+      let blocks = "";
+      for (let i = 0; i < count; i++) {
+        const x = 22 + (i % 3) * 16 - (i > 2 ? 6 : 0);
+        const y = 44 - Math.floor(i / 2) * 12;
+        blocks += `
+          <g transform="translate(${x}, ${y})">
+            <rect x="0" y="4" width="34" height="14" rx="2" fill="#92400e"/>
+            <rect x="0" y="0" width="34" height="14" rx="2" fill="url(#goldGrad)" stroke="#fef3c7" stroke-width="0.8"/>
+            <text x="17" y="10" font-size="7" font-weight="900" fill="#451a03" text-anchor="middle">UC</text>
+          </g>`;
+      }
+      return `
+        <svg width="96" height="72" viewBox="0 0 96 72" fill="none">
+          <defs>
+            <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fde68a"/>
+              <stop offset="50%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#b45309"/>
+            </linearGradient>
+          </defs>
+          ${blocks}
+        </svg>`;
+    }
+
+    async function initApp() {
+      if (isAdmin) {
+        document.getElementById("navAdmin").classList.remove("hidden");
+      }
+
+      const savedId = localStorage.getItem("saved_pubg_id");
+      if (savedId) {
+        document.getElementById("pubgIdInput").value = savedId;
+        document.getElementById("idStatusBtn").textContent = "Saqlangan ✓";
+      }
+
+      if (API_URL) {
+        try {
+          const res = await fetch(`${API_URL}/api/config`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.cardNumber && data.cardNumber !== "8600 1234 5678 9012") state.cardNumber = data.cardNumber;
+            if (data.cardHolder && data.cardHolder !== "ADMIN KARTASI") state.cardHolder = data.cardHolder;
+            if (data.clickMerchantId) state.clickMerchantId = data.clickMerchantId;
+            if (data.clickServiceId) state.clickServiceId = data.clickServiceId;
+            if (data.paymeMerchantId) state.paymeMerchantId = data.paymeMerchantId;
+          }
+        } catch (e) {}
+      }
+
+      renderShop();
+    }
+
+    function savePubgId(showAlert = false) {
+      const val = document.getElementById("pubgIdInput").value.trim();
+      localStorage.setItem("saved_pubg_id", val);
+      const btn = document.getElementById("idStatusBtn");
+      if (val.length >= 7) {
+        btn.textContent = "Saqlangan ✓";
+        btn.style.background = "#10b981";
+        if (showAlert && tg?.showAlert) tg.showAlert("PUBG ID saqlandi: " + val);
+      } else {
+        btn.textContent = "Saqlash";
+        btn.style.background = "#1882ff";
+      }
+    }
+
+    function setMainCategory(cat) {
+      mainCat = cat;
+      document.getElementById("catUcBtn").classList.toggle("active", cat === "uc");
+      document.getElementById("catPrimeBtn").classList.toggle("active", cat === "prime");
+      document.getElementById("ucSubFilters").classList.toggle("hidden", cat !== "uc");
+      document.getElementById("primeSubFilters").classList.toggle("hidden", cat !== "prime");
+      document.getElementById("ucGrid").classList.toggle("hidden", cat !== "uc");
+      document.getElementById("primeList").classList.toggle("hidden", cat !== "prime");
+      renderShop();
+    }
+
+    function setUcFilter(filter, el) {
+      ucFilter = filter;
+      document.querySelectorAll("#ucSubFilters .sub-pill").forEach(b => b.classList.remove("active"));
+      el.classList.add("active");
+      renderShop();
+    }
+
+    function setPrimeFilter(filter, el) {
+      primeFilter = filter;
+      document.querySelectorAll("#primeSubFilters .sub-pill").forEach(b => b.classList.remove("active"));
+      el.classList.add("active");
+      renderShop();
+    }
+
+    function renderShop() {
+      if (mainCat === "uc") {
+        const grid = document.getElementById("ucGrid");
+        let list = state.items.filter(i => i.cat === "uc");
+        if (ucFilter === "rp") list = list.filter(i => i.tag === "rp");
+        else if (ucFilter === "popular") list = list.filter(i => i.popular);
+        else if (ucFilter === "big") list = list.filter(i => i.tag === "big");
+
+        grid.innerHTML = list.map(item => `
+          <div class="uc-card" onclick="openCheckout('${item.id}')">
+            <div class="uc-card-top">
+              ${item.popular ? `<div class="popular-tag">Популярный</div>` : ""}
+              ${getUcStackSvg(item.tier || 2)}
+              ${item.pct ? `<div class="bonus-pct-tag">${item.pct}</div>` : ""}
+            </div>
+            <div class="uc-card-body">
+              <div class="uc-amount-row">
+                <span class="uc-mini-badge">UC</span>
+                <span>${item.baseTitle}</span>
+                ${item.bonusTitle ? `<span class="uc-bonus-text">${item.bonusTitle}</span>` : ""}
+              </div>
+              <div class="uc-price-gold">${formatUZS(item.price)}</div>
+              <div class="uc-old-price">${formatUZS(item.oldPrice)}</div>
+              <div class="uc-discount-pill">${item.badge}</div>
+            </div>
+          </div>
+        `).join("");
+      } else {
+        const pList = document.getElementById("primeList");
+        let list = state.items.filter(i => i.cat === "prime");
+        if (primeFilter !== "all") list = list.filter(i => i.period === primeFilter);
+
+        pList.innerHTML = list.map(item => `
+          <div class="prime-card">
+            <div class="prime-banner-head">
+              <div class="prime-title-wrap">
+                <span style="color:${item.type === 'plus' ? '#fbbf24' : '#38bdf8'};">👑</span>
+                <span>${item.name}</span>
+              </div>
+              <div class="prime-offer-right">
+                <div class="prime-offer-big">10% OFF + ${item.mult}</div>
+                <div class="prime-offer-sub">QAYTIM BONUS</div>
+              </div>
+            </div>
+            <div class="prime-perks-body">
+              <div class="perk-sec-title">Obuna bo'ling va darhol oling:</div>
+              <div class="perk-instant-row">
+                ${item.instant.map(x => `<span>💎 ${x}</span>`).join("")}
+              </div>
+              <div class="perk-bottom-split">
+                <span class="perk-sec-title" style="margin:0;">Har kuni olish mumkin:</span>
+                <div class="daily-chips">
+                  ${item.daily.map(d => `<div class="daily-chip">${d}</div>`).join("")}
+                </div>
+              </div>
+            </div>
+            <div class="prime-footer">
+              <div class="prime-price-box">${formatUZS(item.price)} <span>${item.periodLabel}</span></div>
+              <button class="prime-sub-btn" onclick="openCheckout('${item.id}')">🔒 Obuna bo'lish</button>
+            </div>
+          </div>
+        `).join("");
+      }
+    }
+
+    function getDisplayName(item) {
+      if (item.cat === "prime") return `${item.name} (${item.periodLabel.replace("/", "")})`;
+      return `${item.baseTitle}${item.bonusTitle ? " " + item.bonusTitle : ""} UC`;
+    }
+
+    function openCheckout(itemId) {
+      const pubgId = document.getElementById("pubgIdInput").value.trim();
+      if (!pubgId || pubgId.length < 7) {
+        alert("⚠️ Avval tepadagi maydonga PUBG Mobile ID raqamingizni kiriting!");
+        document.getElementById("pubgIdInput").focus();
+        return;
+      }
+
+      selectedItem = state.items.find(i => i.id === itemId);
+      document.getElementById("mPkgName").textContent = getDisplayName(selectedItem);
+      document.getElementById("mPubgId").textContent = pubgId;
+      document.getElementById("mPkgPrice").textContent = formatUZS(selectedItem.price);
+      document.getElementById("mCardNum").textContent = state.cardNumber;
+      document.getElementById("mCardHolder").textContent = state.cardHolder;
+      document.getElementById("receiptFile").value = "";
+      document.getElementById("receiptPreview").classList.add("hidden");
+      document.getElementById("payModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("payModal").classList.remove("open");
+    }
+
+    function copyCard() {
+      navigator.clipboard.writeText(state.cardNumber.replace(/\s+/g, ""));
+      if (tg?.showAlert) tg.showAlert("Karta raqami nusxalandi: " + state.cardNumber.replace(/\s+/g, ""));
+      else alert("Karta raqami nusxalandi!");
+    }
+
+    function buildOrder(method) {
+      const pubgId = document.getElementById("pubgIdInput").value.trim();
+      return {
+        id: "ORD" + Date.now().toString().slice(-6),
+        userId: currentUser?.id || 0,
+        userName: currentUser?.first_name || "Mijoz",
+        pubgId: pubgId,
+        itemId: selectedItem.id,
+        itemName: getDisplayName(selectedItem),
+        basePrice: selectedItem.base,
+        price: selectedItem.price,
+        method: method,
+        status: "pending",
+        date: new Date().toLocaleString("uz-UZ")
+      };
+    }
+
+    async function payWithGateway(provider) {
+      if (provider === "click" && (!state.clickMerchantId || !state.clickServiceId)) {
+        alert("⚠️ Admin panelda Click Merchant ID va Service ID hali kiritilmagan.");
+        return;
+      }
+      if (provider === "payme" && !state.paymeMerchantId) {
+        alert("⚠️ Admin panelda Payme Merchant ID hali kiritilmagan.");
+        return;
+      }
+
+      const orderObj = buildOrder(provider);
+      state.orders.unshift(orderObj);
+      localStorage.setItem("uc_orders", JSON.stringify(state.orders));
+
+      if (API_URL) {
+        try {
+          const fd = new FormData();
+          fd.append("order", JSON.stringify(orderObj));
+          await fetch(`${API_URL}/api/order`, { method: "POST", body: fd });
+        } catch (e) {}
+      }
+
+      let url = "";
+      if (provider === "click") {
+        url = `https://my.click.uz/services/pay?service_id=${encodeURIComponent(state.clickServiceId)}&merchant_id=${encodeURIComponent(state.clickMerchantId)}&amount=${orderObj.price}&transaction_param=${orderObj.id}`;
+      } else {
+        const tiyin = Math.round(orderObj.price * 100);
+        url = `https://checkout.paycom.uz/${btoa(`m=${state.paymeMerchantId};ac.order_id=${orderObj.id};a=${tiyin}`)}`;
+      }
+
+      closeModal();
+      if (tg?.openLink) tg.openLink(url);
+      else window.open(url, "_blank");
+    }
+
+    function previewReceipt(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = document.getElementById("receiptPreview");
+        img.src = reader.result;
+        img.classList.remove("hidden");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function submitReceiptOrder() {
+      const fileInput = document.getElementById("receiptFile");
+      if (!fileInput.files.length && API_URL) {
+        alert("📸 Iltimos, to‘lov cheki rasmini tanlang!");
+        return;
+      }
+
+      const orderObj = buildOrder("receipt");
+      orderObj.receiptDataUrl = document.getElementById("receiptPreview").src || "";
+      state.orders.unshift(orderObj);
+      localStorage.setItem("uc_orders", JSON.stringify(state.orders));
+
+      if (API_URL) {
+        const btn = document.getElementById("submitOrderBtn");
+        btn.disabled = true;
+        btn.textContent = "⏳ Yuborilmoqda...";
+        try {
+          const fd = new FormData();
+          fd.append("order", JSON.stringify({ ...orderObj, receiptDataUrl: "" }));
+          if (fileInput.files[0]) fd.append("receipt", fileInput.files[0]);
+          const res = await fetch(`${API_URL}/api/order`, { method: "POST", body: fd });
+          if (res.ok) {
+            closeModal();
+            alert("✅ Chek yuborildi! Tez orada UC tushiriladi.");
+            switchView("orders");
+          }
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "✅ Chek bilan tasdiqlash";
+        }
+      } else {
+        const payload = btoa(`${orderObj.id}|${orderObj.pubgId}|${selectedItem.id}|${selectedItem.price}`);
+        const botLink = `https://t.me/${BOT_USERNAME}?start=pay_${payload}`;
+        closeModal();
+        if (tg?.openTelegramLink) tg.openTelegramLink(botLink);
+        else window.open(botLink, "_blank");
+      }
+    }
+
+    function switchView(view) {
+      if (view === "admin" && !isAdmin) return;
+      ["viewShop", "viewOrders", "viewAdmin"].forEach(id => document.getElementById(id).classList.add("hidden"));
+      ["navShop", "navOrders", "navAdmin"].forEach(id => document.getElementById(id).classList.remove("active"));
+
+      if (view === "shop") {
+        document.getElementById("viewShop").classList.remove("hidden");
+        document.getElementById("navShop").classList.add("active");
+      } else if (view === "orders") {
+        document.getElementById("viewOrders").classList.remove("hidden");
+        document.getElementById("navOrders").classList.add("active");
+        renderMyOrders();
+      } else if (view === "admin") {
+        document.getElementById("viewAdmin").classList.remove("hidden");
+        document.getElementById("navAdmin").classList.add("active");
+        renderAdminPanel();
+      }
+    }
+
+    function renderMyOrders() {
+      const box = document.getElementById("myOrdersList");
+      const uid = Number(currentUser?.id || 0);
+      const mine = state.orders.filter(o => Number(o.userId) === uid);
+      if (!mine.length) {
+        box.innerHTML = `<div style="color:var(--text-muted); font-size:13px;">Sizda hali buyurtmalar yo'q.</div>`;
+        return;
+      }
+      box.innerHTML = mine.map(o => `
+        <div class="order-item">
+          <div style="display:flex; justify-content:space-between;">
+            <strong>#${o.id} • ${o.itemName}</strong>
+            <span class="status-tag st-${o.status}">
+              ${o.status === 'pending' ? '⏳ Kutilmoqda' : o.status === 'approved' ? '✅ Tasdiqlandi' : '❌ Rad etildi'}
+            </span>
+          </div>
+          <div style="color:var(--text-muted); margin-top:4px;">PUBG ID: ${o.pubgId} | ${formatUZS(o.price)}</div>
+          <div style="color:var(--text-muted); font-size:11px; margin-top:2px;">${o.date}</div>
+        </div>
+      `).join("");
+    }
+
+    async function renderAdminPanel() {
+      if (!isAdmin) return;
+      document.getElementById("admClickMerchant").value = state.clickMerchantId;
+      document.getElementById("admClickService").value = state.clickServiceId;
+      document.getElementById("admPaymeMerchant").value = state.paymeMerchantId;
+      document.getElementById("admCardNum").value = state.cardNumber;
+      document.getElementById("admCardHolder").value = state.cardHolder;
+
+      if (API_URL) {
+        try {
+          const res = await fetch(`${API_URL}/api/orders?admin_id=${currentUser.id}`);
+          if (res.ok) state.orders = await res.json();
+        } catch (e) {}
+      }
+
+      const approved = state.orders.filter(o => o.status === "approved");
+      const rev = approved.reduce((s, o) => s + Number(o.price || 0), 0);
+      const profit = approved.reduce((s, o) => s + (Number(o.price || 0) - Number(o.basePrice || 0)), 0);
+
+      document.getElementById("statTotal").textContent = state.orders.length;
+      document.getElementById("statApproved").textContent = approved.length;
+      document.getElementById("statRevenue").textContent = formatUZS(rev);
+      document.getElementById("statProfit").textContent = formatUZS(profit);
+
+      const admBox = document.getElementById("adminOrdersList");
+      admBox.innerHTML = state.orders.length ? state.orders.map(o => `
+        <div class="order-item">
+          <div style="display:flex; justify-content:space-between;">
+            <strong>#${o.id} — ${o.userName}</strong>
+            <span class="status-tag st-${o.status}">${o.status.toUpperCase()}</span>
+          </div>
+          <div style="margin-top:4px;">Paket: <b>${o.itemName}</b> | PUBG ID: <b>${o.pubgId}</b></div>
+          <div style="color:var(--gold); font-weight:700;">Summa: ${formatUZS(o.price)} • ${(o.method || 'chek').toUpperCase()}</div>
+          ${o.receiptUrl ? `<img src="${API_URL}${o.receiptUrl}" style="max-width:100%; border-radius:8px; margin-top:8px;" />` :
+            (o.receiptDataUrl ? `<img src="${o.receiptDataUrl}" style="max-width:100%; border-radius:8px; margin-top:8px;" />` : '')}
+          ${o.status === 'pending' ? `
+            <div class="order-actions">
+              <button class="btn-ok" onclick="changeOrderStatus('${o.id}', 'approved')">✅ Tasdiqlash</button>
+              <button class="btn-no" onclick="changeOrderStatus('${o.id}', 'rejected')">❌ Rad etish</button>
+            </div>` : ''}
+        </div>
+      `).join("") : `<div style="color:var(--text-muted); font-size:13px;">Buyurtmalar topilmadi.</div>`;
+
+      document.getElementById("adminPriceList").innerHTML = state.items.map(i => `
+        <div class="price-edit-row">
+          <span>${getDisplayName(i)}</span>
+          <input type="number" class="mini-price-input" data-item-id="${i.id}" value="${i.price}" />
+        </div>
+      `).join("");
+    }
+
+    async function changeOrderStatus(orderId, status) {
+      if (!isAdmin) return;
+      const idx = state.orders.findIndex(o => o.id === orderId);
+      if (idx > -1) state.orders[idx].status = status;
+      localStorage.setItem("uc_orders", JSON.stringify(state.orders));
+
+      if (API_URL) {
+        await fetch(`${API_URL}/api/order/status`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ admin_id: currentUser.id, order_id: orderId, status })
+        });
+      }
+      renderAdminPanel();
+    }
+
+    async function saveEditedPrices() {
+      if (!isAdmin) return;
+      document.querySelectorAll(".mini-price-input").forEach(inp => {
+        const id = inp.getAttribute("data-item-id");
+        const val = parseInt(inp.value, 10);
+        const target = state.items.find(x => x.id === id);
+        if (target && !isNaN(val) && val > 0) target.price = val;
+      });
+      localStorage.setItem("uc_custom_items_v2", JSON.stringify(state.items));
+      renderShop();
+      alert("✅ Barcha narxlar yangilandi!");
+    }
+
+    async function saveAdminSettings() {
+      if (!isAdmin) return;
+      state.clickMerchantId = document.getElementById("admClickMerchant").value.trim();
+      state.clickServiceId = document.getElementById("admClickService").value.trim();
+      state.paymeMerchantId = document.getElementById("admPaymeMerchant").value.trim();
+      state.cardNumber = document.getElementById("admCardNum").value.trim();
+      state.cardHolder = document.getElementById("admCardHolder").value.trim();
+
+      localStorage.setItem("uc_click_merchant", state.clickMerchantId);
+      localStorage.setItem("uc_click_service", state.clickServiceId);
+      localStorage.setItem("uc_payme_merchant", state.paymeMerchantId);
+      localStorage.setItem("uc_card_num", state.cardNumber);
+      localStorage.setItem("uc_card_holder", state.cardHolder);
+
+      if (API_URL) {
+        await fetch(`${API_URL}/api/settings`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            admin_id: currentUser.id,
+            clickMerchantId: state.clickMerchantId,
+            clickServiceId: state.clickServiceId,
+            paymeMerchantId: state.paymeMerchantId,
+            cardNumber: state.cardNumber,
+            cardHolder: state.cardHolder
+          })
+        });
+      }
+      alert("✅ Sozlamalar saqlandi!");
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
